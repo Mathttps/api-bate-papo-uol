@@ -122,7 +122,7 @@ app.get("/messages", async (req, res) => {
     const user = req.headers.user;
 
     if (limit !== undefined && (!Number.isInteger(+limit) || +limit < 1)) {
-        res.status(422).send("O parâmetro 'limit' deve ser um número inteiro maior ou igual a 1.");
+        res.status(422).send("422");
         return;
     }
 
@@ -139,7 +139,6 @@ app.get("/messages", async (req, res) => {
         if (limit === undefined) {
             res.send(messages);
         } else {
-            // Converte o 'limit' para um número inteiro positivo.
             const limitInt = +limit;
 
             res.send(messages.slice(-limitInt));

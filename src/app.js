@@ -121,6 +121,11 @@ app.get("/messages", async (req, res) => {
     const limit = req.query.limit;
     const user = req.headers.user;
 
+    if (limit !== undefined && parseInt(limit) < 0) {
+        res.status(422).send("O parâmetro 'limit' deve ser maior ou igual a zero.");
+        return;
+    }
+
     try {
         const query = {
             $or: [{ to: user }, { to: "Todos" }, { from: user }]

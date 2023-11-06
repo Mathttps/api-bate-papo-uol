@@ -121,8 +121,8 @@ app.get("/messages", async (req, res) => {
     const limit = req.query.limit;
     const user = req.headers.user;
 
-    if (limit !== undefined && parseInt(limit) < 0) {
-        res.status(422).send("O parâmetro 'limit' deve ser maior ou igual a zero.");
+    if (limit !== undefined && (!Number.isInteger(+limit) || +limit < 1)) {
+        res.status(422).send("O parâmetro 'limit' deve ser um número inteiro maior ou igual a 1.");
         return;
     }
 
@@ -136,10 +136,13 @@ app.get("/messages", async (req, res) => {
             .find(query)
             .toArray();
 
-        if (!limit) {
+        if (limit === undefined) {
             res.send(messages);
         } else {
-            res.send(messages.slice(-limit));
+            // Converte o 'limit' para um número inteiro positivo.
+            const limitInt = +limit;
+
+            res.send(messages.slice(-limitInt));
         }
     } catch (err) {
         console.log(err);
